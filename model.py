@@ -139,10 +139,3 @@ def initialize_model(file1: str = './tmdb_5000_credits.csv', file2: str = './tmd
     main_df = normalize_df(df2)
     cosine_sim = create_cosine_sim(main_df)
     return main_df, cosine_sim
-
-
-df, cosine_sim = initialize_model()
-
-
-print(get_recommendations(df, 'The Dark Knight Rises', cosine_sim))
-print(get_recommendations(df, 'Black November', cosine_sim))
