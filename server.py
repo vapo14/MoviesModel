@@ -1,23 +1,23 @@
 import asyncio
-
+import json
 import websockets
 
 from model import initialize_model, get_recommendations
 
+# INITIALIZE DATA AND MODEL
 df, cosine_sim = initialize_model()
-
-# create handler for each connection
 
 
 async def handler(websocket, path):
 
     data = await websocket.recv()
 
-    recommendation_list = get_recommendations(df, data, cosine_sim)
+    recommendation_list = get_recommendations(df, data, cosine_sim).values
+    rec_dict = {"recommendation_titles": [
+        {"title": title} for title in recommendation_list]}
+    data = json.dumps(rec_dict)
 
-    reply = "\n".join(recommendation_list.values)
-
-    await websocket.send(reply)
+    await websocket.send(data)
 
 
 start_server = websockets.serve(handler, "localhost", 8000)
